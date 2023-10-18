@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "deadline_backend",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -9,7 +9,7 @@
     "dev": "nodemon server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "AlexR,ChrisF,WilliamF",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
