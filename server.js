@@ -40,7 +40,7 @@ const vehicleSchema = new mongoose.Schema({
     },
     state: {
         type: String,
-        default: 'needs reapirs'
+        default: 'needsReapirs'
     },
     comments: {
         type: String,
