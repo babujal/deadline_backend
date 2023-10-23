@@ -9,23 +9,19 @@ const { DATABASE_URL, PORT = 3000 } = process.env
 // import express 
 const express = require('express')
 // create application object 
-const app = express() 
-// import mongoose 
+const app = express()
+// import mongoose
 const mongoose = require('mongoose')
 // import middleware
 const cors = require('cors')
 const morgan = require('morgan')
-
+const dbConnect = require("./db/dbConnect");
 ////////////////////////////////
 // DATABASE CONNECTION 
 ////////////////////////////////
-mongoose.connect(DATABASE_URL) // we do not need to pass options? 
-
-mongoose.connection
-    .on('open', () => console.log('You are connected to mongoose'))
-    .on('close', () => console.log('You are disconnected to mongoose'))
-    .on('error', (err) => console.log(err))
-
+// Establish Connection to MongoDB
+dbConnect();
+// 
 ////////////////////////////////
 // MODELS 
 ////////////////////////////////
