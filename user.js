@@ -42,20 +42,20 @@ app.post("/register", async (req, res) => {
 app.post("/login", async (req, res) => {
 	try {
 		const { username, password } = req.body;
-		const user = await User.findOne({ username });
+		const user = await User.findOne({ username })
 		if (!user) {
 			res
 				.status(401)
-				.json({ message: "Authentication failed. User not found." });
+				.json({ message: "Authentication failed. User not found." })
 			return;
 		}
-		const passwordMatch = await bcrypt.compare(password, user.password);
+		const passwordMatch = await bcrypt.compare(password, user.password)
 		if (passwordMatch) {
-			res.status(200).json({ message: "Authentication successful", user });
+			res.status(200).json({ message: "Authentication successful", user })
 		} else {
 			res
 				.status(401)
-				.json({ message: "Authentication failed. Password incorrect." });
+				.json({ message: "Authentication failed. Password incorrect." })
 		}
 	} catch (error) {
 		res.status(500).json(error);
