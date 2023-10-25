@@ -19,7 +19,7 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const morgan = require('morgan')
 const Vehicle = require('./models/vehicles')
-const User = require('./models/user')
+const Users = require('./models/user')
 
 ////////////////////////////////
 // DATABASE CONNECTION 
@@ -34,7 +34,7 @@ mongoose.connection
 ////////////////////////////////
 // MIDDLEWARE
 ////////////////////////////////
-app.use(cors())
+app.use(cors('*'))
 app.use(morgan('dev'))
 app.use(express.json())
 
@@ -72,9 +72,10 @@ app.post("/vehicle/register", async (req, res) => {
 	try {
 		const { username, password } = req.body
 		const hashedPassword = await bcrypt.hash(password, 6)
-		const newUser = await User.create({ username, password: hashedPassword })
+		const newUser = await Users.create({ username, password: hashedPassword })
 		res.status(201).json(newUser)
 	} catch (error) {
+        console.log('Registration error', error)
 		res.status(400).json(error)
 	}
 })
