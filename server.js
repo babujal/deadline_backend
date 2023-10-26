@@ -6,8 +6,7 @@ require("dotenv").config();
 // pull PORT from .env, give default value of 3000 
 // if the PORT does NOT exist 
 // const { DATABASE_URL, PORT = 3000 } = process.env
-const DATABASE_URL = 'mongodb+srv://dercamar1:Nvidiamx4000!@mymongodb.u0g2e6j.mongodb.net/?retryWrites=true&w=majority'
-const PORT = 4000
+const { DATABASE_URL, PORT = 4000 } = process.env
 // import express 
 const express = require('express')
 const bcrypt = require("bcrypt")
