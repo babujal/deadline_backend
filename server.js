@@ -6,8 +6,7 @@ require("dotenv").config();
 // pull PORT from .env, give default value of 3000 
 // if the PORT does NOT exist 
 // const { DATABASE_URL, PORT = 3000 } = process.env
-const DATABASE_URL = 'mongodb+srv://dercamar1:Nvidiamx4000!@mymongodb.u0g2e6j.mongodb.net/?retryWrites=true&w=majority'
-const PORT = 4000
+const { DATABASE_URL, PORT = 4000 } = process.env
 // import express 
 const express = require('express')
 const bcrypt = require("bcrypt")
@@ -79,6 +78,28 @@ app.post("/vehicle/register", async (req, res) => {
 		res.status(400).json(error)
 	}
 })
+
+app.post('/vehicle/login', async (req, res) => {
+    try {
+        const { username, password } = req.body
+        const foundUser = await Users.findOne({ username })
+
+        if (foundUser) {
+            const isAMatch = bcrypt.compareSync(password, foundUser.password)
+            if (isAMatch) {
+                console.log('Login successful')
+                res.json({ message: 'Login successful' })
+            } else {
+                res.status(401).json({ message: 'Invalid credentials' })
+            }
+        } else {
+            res.status(401).json({ message: 'User not found' })
+        }
+    } catch (error) {
+        console.error('Login error', error)
+        res.status(500).json({ message: 'An error occurred' })
+    }
+});
 
 // VEHICLE CREATE ROUTE 
 app.post("/vehicle", async (req, res) => {
