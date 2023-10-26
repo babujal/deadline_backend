@@ -52,6 +52,19 @@ const vehicleSchema = new mongoose.Schema({
     }
 })
 
+//User model
+const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    }
+})
+const User= mongoose.model("User")
+//
 const Vehicle = mongoose.model("Vehicle", vehicleSchema)
 
 ////////////////////////////////
@@ -109,7 +122,16 @@ app.delete("/vehicle/:id", async (req, res) => {
     }
 })
 
-
+//USER ROUTE
+app.post("/register", async (req, res) => {
+    try {
+        // create a user 
+        res.json(await User.create(req.body))
+    } catch (error) {
+        // send error
+        res.status(400).json(error)
+    }
+})
 
 ////////////////////////////////
 // LISTENER 
@@ -120,3 +142,4 @@ app.listen(PORT, () => console.log(`listening on PORT ${PORT}`))
 //     "vehicle_make":"Honda",
 //     "issue_description": "Interior lights, probably dirty contacs"
 // }]
+
