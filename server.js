@@ -5,9 +5,12 @@
 require("dotenv").config(); 
 // pull PORT from .env, give default value of 3000 
 // if the PORT does NOT exist 
-const { DATABASE_URL, PORT = 3000 } = process.env
+// const { DATABASE_URL, PORT = 3000 } = process.env
+const DATABASE_URL = 'mongodb+srv://dercamar1:Nvidiamx4000!@mymongodb.u0g2e6j.mongodb.net/?retryWrites=true&w=majority'
+const PORT = 4000
 // import express 
 const express = require('express')
+const bcrypt = require("bcrypt")
 // create application object 
 const app = express() 
 // import mongoose 
@@ -15,6 +18,8 @@ const mongoose = require('mongoose')
 // import middleware
 const cors = require('cors')
 const morgan = require('morgan')
+const Vehicle = require('./models/vehicles')
+const Users = require('./models/user')
 
 ////////////////////////////////
 // DATABASE CONNECTION 
@@ -27,37 +32,9 @@ mongoose.connection
     .on('error', (err) => console.log(err))
 
 ////////////////////////////////
-// MODELS 
-////////////////////////////////
-const vehicleSchema = new mongoose.Schema({
-    vehicle_make: {
-        type: String,
-        required: true
-    },
-    issue_description: {
-        type: String,
-        required: true
-    },
-    state: {
-        type: String,
-        default: 'needsRepairs'
-    },
-    comments: {
-        type: String,
-        default: ''
-    },
-    time_stamp: {
-        type: Date,
-        default: Date.now
-    }
-})
-
-const Vehicle = mongoose.model("Vehicle", vehicleSchema)
-
-////////////////////////////////
 // MIDDLEWARE
 ////////////////////////////////
-app.use(cors())
+app.use(cors('*'))
 app.use(morgan('dev'))
 app.use(express.json())
 
@@ -69,6 +46,16 @@ app.get('/', (req, res) => {
     res.send("hello world")
 })
 
+app.get("/user", async (req, res) => {
+    try {
+        // send all vehicle 
+        res.json(await User.find({}))
+    } catch (error) {
+        // send error
+        res.status(400).json(error)
+    }
+})
+
 // VEHICLE INDEX ROUTE
 app.get("/vehicle", async (req, res) => {
     try {
@@ -78,6 +65,19 @@ app.get("/vehicle", async (req, res) => {
         // send error
         res.status(400).json(error)
     }
+})
+
+// USER CREATE ROUTE 
+app.post("/vehicle/register", async (req, res) => {
+	try {
+		const { username, password } = req.body
+		const hashedPassword = await bcrypt.hash(password, 6)
+		const newUser = await Users.create({ username, password: hashedPassword })
+		res.status(201).json(newUser)
+	} catch (error) {
+        console.log('Registration error', error)
+		res.status(400).json(error)
+	}
 })
 
 // VEHICLE CREATE ROUTE 
